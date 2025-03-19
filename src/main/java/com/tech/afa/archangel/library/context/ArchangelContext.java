@@ -12,8 +12,10 @@ public class ArchangelContext {
 
     private final Map<String, Table> tablesCache;
 
-    public ArchangelContext() {
+    public ArchangelContext(Map<String, Table> tables) {
         this.cache = new HashMap<>();
-        this.tablesCache = new HashMap<>();
+        this.tablesCache = tables;
+
+        tablesCache.forEach(((s, table) -> System.out.println(table.toString())));
     }
 }

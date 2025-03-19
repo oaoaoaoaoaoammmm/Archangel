@@ -11,6 +11,6 @@ public class InterceptorImpl implements Interceptor {
     private final Processor processor;
 
     public void intercept(String sql) {
-        processor.process(sql);
+        processor.processing(sql);
     }
 }

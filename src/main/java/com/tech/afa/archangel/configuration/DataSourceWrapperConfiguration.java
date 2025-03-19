@@ -20,7 +20,7 @@ public class DataSourceWrapperConfiguration {
 
     @Bean
     @Primary
-    public DataSource dataSourceWrapper(DataSource dataSource) {
-        return Archangel.initialize(dataSource).getWrapperDataSource();
+    public DataSource dataSourceWrapper(DataSource dataSource, ArchangelProperties properties) {
+        return new Archangel(dataSource, properties.getSchema()).getWrapperDataSource();
     }
 }
