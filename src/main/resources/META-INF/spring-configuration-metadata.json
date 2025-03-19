@@ -1,0 +1,16 @@
+{
+  "properties": [
+    {
+      "name": "spring.archangel.enabled",
+      "type": "java.lang.Boolean",
+      "description": "On/off toggle",
+      "defaultValue": "false"
+    },
+    {
+      "name": "spring.archangel.message",
+      "type": "java.lang.String",
+      "description": "msg",
+      "defaultValue": ""
+    }
+  ]
+}
