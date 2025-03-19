@@ -1,6 +1,6 @@
 package com.tech.afa.archangel.library.wrapper;
 
-import com.tech.afa.archangel.library.Interceptor;
+import com.tech.afa.archangel.library.interceptor.Interceptor;
 
 import java.sql.Array;
 import java.sql.Blob;

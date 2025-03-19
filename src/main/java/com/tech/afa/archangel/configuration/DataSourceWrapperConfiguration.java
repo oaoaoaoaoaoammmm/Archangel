@@ -1,6 +1,6 @@
 package com.tech.afa.archangel.configuration;
 
-import com.tech.afa.archangel.library.wrapper.DataSourceWrapper;
+import com.tech.afa.archangel.library.Archangel;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +21,6 @@ public class DataSourceWrapperConfiguration {
     @Bean
     @Primary
     public DataSource dataSourceWrapper(DataSource dataSource) {
-        return new DataSourceWrapper(dataSource);
+        return Archangel.initialize(dataSource).getWrapperDataSource();
     }
 }
