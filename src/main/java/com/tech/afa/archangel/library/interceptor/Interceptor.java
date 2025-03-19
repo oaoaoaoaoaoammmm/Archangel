@@ -1,4 +1,4 @@
-package com.tech.afa.archangel.library;
+package com.tech.afa.archangel.library.interceptor;
 
 public interface Interceptor {
 
