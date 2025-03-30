@@ -7,4 +7,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.archangel")
 public class ArchangelProperties {
     private boolean enabled;
+    private String schema;
 }

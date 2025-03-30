@@ -7,10 +7,9 @@
       "defaultValue": "false"
     },
     {
-      "name": "spring.archangel.message",
+      "name": "spring.archangel.schema",
       "type": "java.lang.String",
-      "description": "msg",
-      "defaultValue": ""
+      "description": "Database schema"
     }
   ]
 }
