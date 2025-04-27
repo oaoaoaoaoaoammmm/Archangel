@@ -1,7 +1,7 @@
 package com.tech.afa.archangel.library.utils;
 
-import com.tech.afa.archangel.library.model.Condition;
-import com.tech.afa.archangel.library.model.Table;
+import com.tech.afa.archangel.library.model.enums.Condition;
+import com.tech.afa.archangel.library.model.table.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -11,28 +11,28 @@ import java.util.regex.Pattern;
 @NoArgsConstructor(access = AccessLevel.NONE)
 public class PredicateParser {
 
-    public static Table.Index.Predicate parse(String predicateExpression) {
+    public static Predicate parse(String predicateExpression) {
         if (predicateExpression == null || predicateExpression.trim().isEmpty()) {
             return null;
         }
         String normalized = normalizeExpression(predicateExpression);
-        Table.Index.Predicate complex = parseComplexCondition(normalized);
+        Predicate complex = parseComplexCondition(normalized);
         if (complex != null) {
             return complex;
         }
-        Table.Index.Predicate nullCheck = parseNullCheck(normalized);
+        Predicate nullCheck = parseNullCheck(normalized);
         if (nullCheck != null) {
             return nullCheck;
         }
-        Table.Index.Predicate compound = parseCompound(normalized);
+        Predicate compound = parseCompound(normalized);
         if (compound != null) {
             return compound;
         }
-        Table.Index.Predicate between = parseBetween(normalized);
+        Predicate between = parseBetween(normalized);
         if (between != null) {
             return between;
         }
-        Table.Index.Predicate in = parseIn(normalized);
+        Predicate in = parseIn(normalized);
         if (in != null) {
             return in;
         }
@@ -66,7 +66,7 @@ public class PredicateParser {
         return false;
     }
 
-    private static Table.Index.Predicate parseComplexCondition(String expr) {
+    private static Predicate parseComplexCondition(String expr) {
         Pattern pattern = Pattern.compile(
             "^\\s*\\(\\s*([^)]+)\\s*\\)\\s*$",
             Pattern.CASE_INSENSITIVE
@@ -78,7 +78,7 @@ public class PredicateParser {
         return null;
     }
 
-    private static Table.Index.Predicate parseNullCheck(String expr) {
+    private static Predicate parseNullCheck(String expr) {
         Pattern pattern = Pattern.compile(
             "^([\\w_]+)\\s+(IS\\s+(NOT\\s+)?NULL)\\s*$",
             Pattern.CASE_INSENSITIVE
@@ -86,7 +86,7 @@ public class PredicateParser {
         Matcher matcher = pattern.matcher(expr);
         if (matcher.matches()) {
             boolean isNotNull = matcher.group(2) != null;
-            return new Table.Index.Predicate(
+            return new Predicate(
                 matcher.group(1),
                 isNotNull ? Condition.IS_NOT_NULL : Condition.IS_NULL,
                 null,
@@ -97,7 +97,7 @@ public class PredicateParser {
         return null;
     }
 
-    private static Table.Index.Predicate parseCompound(String expr) {
+    private static Predicate parseCompound(String expr) {
         int andPos = findOperatorPosition(expr, "AND");
         if (andPos > 0) {
             return createCompoundPredicate(expr, andPos, 3, Condition.AND);
@@ -130,17 +130,17 @@ public class PredicateParser {
         return -1;
     }
 
-    private static Table.Index.Predicate createCompoundPredicate(String expr, int opPos, int opLength, Condition condition) {
+    private static Predicate createCompoundPredicate(String expr, int opPos, int opLength, Condition condition) {
         String left = expr.substring(0, opPos).trim();
         String right = expr.substring(opPos + opLength).trim();
-        Table.Index.Predicate leftPred = parse(left);
-        Table.Index.Predicate rightPred = parse(right);
+        Predicate leftPred = parse(left);
+        Predicate rightPred = parse(right);
         if (leftPred != null && rightPred != null) {
-            Table.Index.Predicate range = tryCreateRange(leftPred, rightPred, condition);
+            Predicate range = tryCreateRange(leftPred, rightPred, condition);
             if (range != null) {
                 return range;
             }
-            return new Table.Index.Predicate(
+            return new Predicate(
                 leftPred.getFieldName(),
                 leftPred.getCondition(),
                 leftPred.getValue(),
@@ -151,14 +151,14 @@ public class PredicateParser {
         return null;
     }
 
-    private static Table.Index.Predicate parseBetween(String expr) {
+    private static Predicate parseBetween(String expr) {
         Pattern pattern = Pattern.compile(
             "^([\\w_]+)\\s+BETWEEN\\s+('[^']*'|\\d+)\\s+AND\\s+('[^']*'|\\d+)\\s*$",
             Pattern.CASE_INSENSITIVE
         );
         Matcher matcher = pattern.matcher(expr);
         if (matcher.matches()) {
-            return new Table.Index.Predicate(
+            return new Predicate(
                 matcher.group(1),
                 Condition.BETWEEN,
                 matcher.group(2).replaceAll("'", "") + " AND " + matcher.group(3).replaceAll("'", ""),
@@ -169,14 +169,14 @@ public class PredicateParser {
         return null;
     }
 
-    private static Table.Index.Predicate parseIn(String expr) {
+    private static Predicate parseIn(String expr) {
         Pattern pattern = Pattern.compile(
             "^([\\w_]+)\\s+IN\\s*\\(\\s*([^)]+)\\s*\\)\\s*$",
             Pattern.CASE_INSENSITIVE
         );
         Matcher matcher = pattern.matcher(expr);
         if (matcher.matches()) {
-            return new Table.Index.Predicate(
+            return new Predicate(
                 matcher.group(1),
                 Condition.IN,
                 matcher.group(2).replaceAll("'", ""),
@@ -187,7 +187,7 @@ public class PredicateParser {
         return null;
     }
 
-    private static Table.Index.Predicate tryCreateRange(Table.Index.Predicate left, Table.Index.Predicate right, Condition op) {
+    private static Predicate tryCreateRange(Predicate left, Predicate right, Condition op) {
         if (op != Condition.AND) {
             return null;
         }
@@ -204,10 +204,10 @@ public class PredicateParser {
         return null;
     }
 
-    private static Table.Index.Predicate createBetweenPredicate(Table.Index.Predicate lower, Table.Index.Predicate upper) {
+    private static Predicate createBetweenPredicate(Predicate lower, Predicate upper) {
         String lowerBound = lower.getCondition() == Condition.GREATER_OR_EQUAL ? ">= " : "> ";
         String upperBound = upper.getCondition() == Condition.LESS_OR_EQUAL ? "<= " : "< ";
-        return new Table.Index.Predicate(
+        return new Predicate(
             lower.getFieldName(),
             Condition.BETWEEN,
             lowerBound + lower.getValue() + " AND " + upperBound + upper.getValue(),
@@ -216,7 +216,7 @@ public class PredicateParser {
         );
     }
 
-    private static Table.Index.Predicate parseSimple(String expr) {
+    private static Predicate parseSimple(String expr) {
         expr = expr.replaceAll("\\s+", " ").trim();
         Pattern typeCastPattern = Pattern.compile(
             "^([\\w_]+)\\s*(=|!=|>|<|>=|<=|LIKE|ILIKE)\\s*\\(([^)]+)\\)::[\\w]+\\s*$",
@@ -224,7 +224,7 @@ public class PredicateParser {
         );
         Matcher typeCastMatcher = typeCastPattern.matcher(expr);
         if (typeCastMatcher.matches()) {
-            return new Table.Index.Predicate(
+            return new Predicate(
                 typeCastMatcher.group(1),
                 Condition.fromString(typeCastMatcher.group(2)),
                 typeCastMatcher.group(3).replaceAll("'", ""),
@@ -238,7 +238,7 @@ public class PredicateParser {
         );
         Matcher boolMatcher = boolPattern.matcher(expr);
         if (boolMatcher.matches()) {
-            return new Table.Index.Predicate(
+            return new Predicate(
                 boolMatcher.group(1),
                 Condition.fromString(boolMatcher.group(2)),
                 boolMatcher.group(3),
@@ -252,7 +252,7 @@ public class PredicateParser {
         );
         Matcher matcher = pattern.matcher(expr);
         if (matcher.matches()) {
-            return new Table.Index.Predicate(
+            return new Predicate(
                 matcher.group(1),
                 Condition.fromString(matcher.group(2)),
                 matcher.group(3).replaceAll("'", ""),

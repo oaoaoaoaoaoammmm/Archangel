@@ -1,9 +1,9 @@
 package com.tech.afa.archangel.library.repository;
 
-import com.tech.afa.archangel.library.model.ConstraintType;
-import com.tech.afa.archangel.library.model.IndexType;
-import com.tech.afa.archangel.library.model.Table.Column;
-import com.tech.afa.archangel.library.model.Table.Index;
+import com.tech.afa.archangel.library.model.enums.ConstraintType;
+import com.tech.afa.archangel.library.model.enums.IndexType;
+import com.tech.afa.archangel.library.model.table.Column;
+import com.tech.afa.archangel.library.model.table.Index;
 import com.tech.afa.archangel.library.utils.PredicateParser;
 
 import javax.sql.DataSource;

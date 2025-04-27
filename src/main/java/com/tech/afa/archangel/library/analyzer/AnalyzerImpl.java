@@ -2,7 +2,7 @@ package com.tech.afa.archangel.library.analyzer;
 
 import com.tech.afa.archangel.library.context.ArchangelContext;
 import com.tech.afa.archangel.library.model.SQLAnalyzeResult;
-import com.tech.afa.archangel.library.model.SQLRequest;
+import com.tech.afa.archangel.library.model.request.SQLRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,6 +18,7 @@ public class AnalyzerImpl implements Analyzer {
 
     @Override
     public SQLAnalyzeResult analyze(SQLRequest sqlRequest) {
+        context.putRequest(sqlRequest.getId(), sqlRequest);
         return new SQLAnalyzeResult(sqlRequest.getNativeSql());
     }
 }

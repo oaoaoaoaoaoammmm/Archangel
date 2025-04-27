@@ -13,6 +13,7 @@ import com.tech.afa.archangel.library.processor.Processor;
 import com.tech.afa.archangel.library.processor.ProcessorImpl;
 import com.tech.afa.archangel.library.repository.SchemaRepository;
 import com.tech.afa.archangel.library.schemaloader.ContextLoader;
+import com.tech.afa.archangel.library.utils.IdGenerator;
 import com.tech.afa.archangel.library.wrapper.DataSourceWrapper;
 import lombok.Getter;
 
@@ -39,9 +40,10 @@ public class Archangel {
         // Инициализация
         Parser parser = new ParserImpl();
         Exporter exporter = new LogExporter();
+        IdGenerator idGenerator = new IdGenerator();
         Analyzer analyzer = new AnalyzerImpl(dataSource, archangelContext);
         Processor processor = new ProcessorImpl(parser, exporter, analyzer);
-        Interceptor interceptor = new InterceptorImpl(processor);
+        Interceptor interceptor = new InterceptorImpl(processor, idGenerator);
         this.wrapperDataSource = new DataSourceWrapper(dataSource, interceptor);
     }
 }
