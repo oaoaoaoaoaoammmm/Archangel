@@ -18,11 +18,11 @@ public class DataSourceWrapper extends DelegatingDataSource {
 
     @Override
     public Connection getConnection() throws SQLException {
-        return new ConnectionWrapper(super.getConnection(), interceptor);
+        return new ConnectionWrapper(interceptor, super.getConnection());
     }
 
     @Override
     public Connection getConnection(String username, String password) throws SQLException {
-        return new ConnectionWrapper(super.getConnection(username, password), interceptor);
+        return new ConnectionWrapper(interceptor, super.getConnection(username, password));
     }
 }

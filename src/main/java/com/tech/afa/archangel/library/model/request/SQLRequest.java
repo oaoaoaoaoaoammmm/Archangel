@@ -25,6 +25,7 @@ public class SQLRequest {
     private Integer limit;
     private List<List<SQLValue>> values;
 
+    private long executeTime;
     private Map<String, String> aliasToExpression;
 
     public SQLRequest(String id, String nativeSql, SQLCommandType commandType) {
