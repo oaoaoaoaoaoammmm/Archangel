@@ -479,8 +479,15 @@ public class ParserImpl implements Parser {
         SQLCondition condition,
         Map<String, String> aliasToTableName
     ) {
-        if (expression.getLeftExpression() instanceof Column column) {
-            condition.setFieldName(resolveColumnName(column, aliasToTableName));
+        if (expression.getLeftExpression() != null) {
+            if (expression.getLeftExpression() instanceof BinaryExpression) {
+                return;
+            }
+            if (expression.getLeftExpression() instanceof Column column) {
+                condition.setFieldName(resolveColumnName(column, aliasToTableName));
+            } else {
+                condition.setFieldName(expression.getLeftExpression().toString());
+            }
         }
         switch (expression) {
             case EqualsTo ignore -> condition.setCondition(Condition.EQUALS);
@@ -490,7 +497,9 @@ public class ParserImpl implements Parser {
             case MinorThan ignore -> condition.setCondition(Condition.LESS);
             case MinorThanEquals ignore -> condition.setCondition(Condition.LESS_OR_EQUAL);
             case LikeExpression ignore -> condition.setCondition(Condition.LIKE);
-            default -> { }
+            case AndExpression ignore -> condition.setCondition(Condition.AND);
+            case OrExpression ignore -> condition.setCondition(Condition.OR);
+            default -> condition.setCondition(Condition.UNKNOWN);
         }
         if (expression.getRightExpression() != null) {
             if (expression.getRightExpression() instanceof Column column) {

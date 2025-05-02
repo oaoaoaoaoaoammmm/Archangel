@@ -1,6 +1,6 @@
 package com.tech.afa.archangel.library.exporter;
 
-import com.tech.afa.archangel.library.model.SQLAnalyzeResult;
+import com.tech.afa.archangel.library.model.analyze.SQLAnalyzeResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

@@ -13,6 +13,11 @@ public class Table {
     private List<Column> columns;
     private List<Index> indexes;
 
+    public boolean hasColumn(String columnName) {
+        return getColumns().stream()
+            .anyMatch(col -> col.getName().equals(columnName));
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

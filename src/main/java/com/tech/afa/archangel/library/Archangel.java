@@ -25,8 +25,10 @@ import javax.sql.DataSource;
 public class Archangel {
 
     // TODO
-    //  0) научиться TriggerMode делать чтоб статистика считалась, а больше ничего не делалось не экспорт не анализ полноценный
-    //  0.5) сделать чтобы возвращались копии объектов статистики
+    //  0) добавить проверку на функциональный индекс в TransformConditionAnalyzeWorker!
+    //  0.3) прорегресить все что есть и посмотреть норм ли
+    //  0.5) учиться че то делать с подзапросами т е пускать их на второй круг по анализаторам (проверить уже сделал)
+    //  0.8) добавлять новые анализаторы
     //  1) проверить это все на конкретных приложениях
     //  n) доделать инициализацию
 
@@ -51,7 +53,7 @@ public class Archangel {
         IdGenerator idGenerator = new IdGenerator();
         StatisticService statisticService = new StatisticService(archangelContext);
         Analyzer analyzer = new AnalyzerImpl(dataSource, archangelContext);
-        Processor processor = new ProcessorImpl(triggerThreshold, TriggerMode.BY_COUNT, parser, exporter, analyzer, statisticService);
+        Processor processor = new ProcessorImpl(triggerThreshold, triggerMode, parser, exporter, analyzer, statisticService);
         Interceptor interceptor = new InterceptorImpl(processor, idGenerator);
         this.wrapperDataSource = new DataSourceWrapper(dataSource, interceptor);
     }

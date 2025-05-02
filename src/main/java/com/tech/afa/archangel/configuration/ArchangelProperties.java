@@ -9,6 +9,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ArchangelProperties {
     private boolean enabled;
     private String schema;
-    private int triggerThreshold = 5;
+    private int triggerThreshold = 1;
     private TriggerMode triggerMode = TriggerMode.BY_COUNT;
 }

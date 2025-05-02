@@ -11,7 +11,6 @@ import com.tech.afa.archangel.library.model.request.SQLOrderBy;
 import com.tech.afa.archangel.library.model.request.SQLRequest;
 import com.tech.afa.archangel.library.parser.ParserImpl;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 
 import java.util.List;
 
@@ -19,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ParserImplTest {
 
     private final ParserImpl parser = new ParserImpl();
