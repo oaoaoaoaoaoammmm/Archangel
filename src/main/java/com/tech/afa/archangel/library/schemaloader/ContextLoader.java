@@ -1,7 +1,7 @@
 package com.tech.afa.archangel.library.schemaloader;
 
 import com.tech.afa.archangel.library.context.ArchangelContext;
-import com.tech.afa.archangel.library.model.Table;
+import com.tech.afa.archangel.library.model.table.Table;
 import com.tech.afa.archangel.library.repository.SchemaRepository;
 import lombok.RequiredArgsConstructor;
 

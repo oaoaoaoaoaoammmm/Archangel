@@ -1,0 +1,259 @@
+package com.tech.afa.archangel.library.wrapper;
+
+import com.tech.afa.archangel.library.interceptor.Interceptor;
+import com.tech.afa.archangel.library.utils.Pair;
+import com.tech.afa.archangel.library.utils.Timer;
+import lombok.RequiredArgsConstructor;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.Statement;
+
+@RequiredArgsConstructor
+public class StatementWrapper implements Statement {
+
+    private final Interceptor interceptor;
+
+    private final Statement originalStatement;
+
+    @Override
+    public ResultSet executeQuery(String sql) throws SQLException {
+        Pair<ResultSet, Long> result = Timer.measure(() -> originalStatement.executeQuery(sql));
+        interceptor.intercept(sql, result.second());
+        return result.first();
+    }
+
+    @Override
+    public int executeUpdate(String sql) throws SQLException {
+        Pair<Integer, Long> result = Timer.measure(() -> originalStatement.executeUpdate(sql));
+        interceptor.intercept(sql, result.second());
+        return result.first();
+    }
+
+    @Override
+    public void close() throws SQLException {
+        originalStatement.close();
+    }
+
+    @Override
+    public int getMaxFieldSize() throws SQLException {
+        return originalStatement.getMaxFieldSize();
+    }
+
+    @Override
+    public void setMaxFieldSize(int max) throws SQLException {
+        originalStatement.setMaxFieldSize(max);
+    }
+
+    @Override
+    public int getMaxRows() throws SQLException {
+        return originalStatement.getMaxRows();
+    }
+
+    @Override
+    public void setMaxRows(int max) throws SQLException {
+        originalStatement.setMaxRows(max);
+    }
+
+    @Override
+    public void setEscapeProcessing(boolean enable) throws SQLException {
+        originalStatement.setEscapeProcessing(enable);
+    }
+
+    @Override
+    public int getQueryTimeout() throws SQLException {
+        return originalStatement.getQueryTimeout();
+    }
+
+    @Override
+    public void setQueryTimeout(int seconds) throws SQLException {
+        originalStatement.setQueryTimeout(seconds);
+    }
+
+    @Override
+    public void cancel() throws SQLException {
+        originalStatement.cancel();
+    }
+
+    @Override
+    public SQLWarning getWarnings() throws SQLException {
+        return originalStatement.getWarnings();
+    }
+
+    @Override
+    public void clearWarnings() throws SQLException {
+        originalStatement.clearWarnings();
+    }
+
+    @Override
+    public void setCursorName(String name) throws SQLException {
+        originalStatement.setCursorName(name);
+    }
+
+    @Override
+    public boolean execute(String sql) throws SQLException {
+        Pair<Boolean, Long> result = Timer.measure(() -> originalStatement.execute(sql));
+        interceptor.intercept(sql, result.second());
+        return result.first();
+    }
+
+    @Override
+    public ResultSet getResultSet() throws SQLException {
+        return originalStatement.getResultSet();
+    }
+
+    @Override
+    public int getUpdateCount() throws SQLException {
+        return originalStatement.getUpdateCount();
+    }
+
+    @Override
+    public boolean getMoreResults() throws SQLException {
+        return originalStatement.getMoreResults();
+    }
+
+    @Override
+    public void setFetchDirection(int direction) throws SQLException {
+        originalStatement.setFetchDirection(direction);
+    }
+
+    @Override
+    public int getFetchDirection() throws SQLException {
+        return originalStatement.getFetchDirection();
+    }
+
+    @Override
+    public void setFetchSize(int rows) throws SQLException {
+        originalStatement.setFetchSize(rows);
+    }
+
+    @Override
+    public int getFetchSize() throws SQLException {
+        return originalStatement.getFetchSize();
+    }
+
+    @Override
+    public int getResultSetConcurrency() throws SQLException {
+        return originalStatement.getResultSetConcurrency();
+    }
+
+    @Override
+    public int getResultSetType() throws SQLException {
+        return originalStatement.getResultSetType();
+    }
+
+    @Override
+    public void addBatch(String sql) throws SQLException {
+        interceptor.intercept(sql);
+        originalStatement.addBatch(sql);
+    }
+
+    @Override
+    public void clearBatch() throws SQLException {
+        originalStatement.clearBatch();
+    }
+
+    @Override
+    public int[] executeBatch() throws SQLException {
+        return originalStatement.executeBatch();
+    }
+
+    @Override
+    public Connection getConnection() throws SQLException {
+        return originalStatement.getConnection();
+    }
+
+    @Override
+    public boolean getMoreResults(int current) throws SQLException {
+        return originalStatement.getMoreResults(current);
+    }
+
+    @Override
+    public ResultSet getGeneratedKeys() throws SQLException {
+        return originalStatement.getGeneratedKeys();
+    }
+
+    @Override
+    public int executeUpdate(String sql, int autoGeneratedKeys) throws SQLException {
+        Pair<Integer, Long> result = Timer.measure(() -> originalStatement.executeUpdate(sql, autoGeneratedKeys));
+        interceptor.intercept(sql, result.second());
+        return result.first();
+    }
+
+    @Override
+    public int executeUpdate(String sql, int[] columnIndexes) throws SQLException {
+        Pair<Integer, Long> result = Timer.measure(() -> originalStatement.executeUpdate(sql, columnIndexes));
+        interceptor.intercept(sql, result.second());
+        return result.first();
+    }
+
+    @Override
+    public int executeUpdate(String sql, String[] columnNames) throws SQLException {
+        Pair<Integer, Long> result = Timer.measure(() -> originalStatement.executeUpdate(sql, columnNames));
+        interceptor.intercept(sql, result.second());
+        return result.first();
+    }
+
+    @Override
+    public boolean execute(String sql, int autoGeneratedKeys) throws SQLException {
+        Pair<Boolean, Long> result = Timer.measure(() -> originalStatement.execute(sql, autoGeneratedKeys));
+        interceptor.intercept(sql, result.second());
+        return result.first();
+    }
+
+    @Override
+    public boolean execute(String sql, int[] columnIndexes) throws SQLException {
+        Pair<Boolean, Long> result = Timer.measure(() -> originalStatement.execute(sql, columnIndexes));
+        interceptor.intercept(sql, result.second());
+        return result.first();
+    }
+
+    @Override
+    public boolean execute(String sql, String[] columnNames) throws SQLException {
+        Pair<Boolean, Long> result = Timer.measure(() -> originalStatement.execute(sql, columnNames));
+        interceptor.intercept(sql, result.second());
+        return result.first();
+    }
+
+    @Override
+    public int getResultSetHoldability() throws SQLException {
+        return originalStatement.getResultSetHoldability();
+    }
+
+    @Override
+    public boolean isClosed() throws SQLException {
+        return originalStatement.isClosed();
+    }
+
+    @Override
+    public void setPoolable(boolean poolable) throws SQLException {
+        originalStatement.setPoolable(poolable);
+    }
+
+    @Override
+    public boolean isPoolable() throws SQLException {
+        return originalStatement.isPoolable();
+    }
+
+    @Override
+    public void closeOnCompletion() throws SQLException {
+        originalStatement.closeOnCompletion();
+    }
+
+    @Override
+    public boolean isCloseOnCompletion() throws SQLException {
+        return originalStatement.isCloseOnCompletion();
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return originalStatement.unwrap(iface);
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return originalStatement.isWrapperFor(iface);
+    }
+}
