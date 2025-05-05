@@ -12,8 +12,9 @@ import org.testcontainers.utility.DockerImageName;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
-public class BaseIntegrationTest {
+public abstract class BaseIntegrationTest {
 
     private static DataSource dataSource;
 
@@ -26,6 +27,17 @@ public class BaseIntegrationTest {
 
     protected Connection getConnection() throws SQLException {
         return dataSource.getConnection();
+    }
+
+    protected void executeSql(String sql) {
+        try (
+            Connection conn = dataSource.getConnection();
+            Statement stmt = conn.createStatement();
+        ) {
+            stmt.executeQuery(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @BeforeAll

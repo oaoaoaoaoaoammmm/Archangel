@@ -23,8 +23,6 @@ public class TransformConditionAnalyzeWorker implements AnalyzeWorker<SQLRequest
 
     private static final String ADVICE = "The expression %s prevents the index from being used. Change it to use a raw column, or create an index based on a function.";
 
-    private final ArchangelContext context;
-
     @Override
     public AnalyzeWorkerType getAnalyzeWorkerType() {
         return AnalyzeWorkerType.GENERAL;
@@ -35,7 +33,6 @@ public class TransformConditionAnalyzeWorker implements AnalyzeWorker<SQLRequest
         return true;
     }
 
-    // TODO добавить проверку на функциональный индекс!
     @Override
     public WorkerSignal work(SQLRequest sqlRequest, SQLAnalyzeResult sqlAnalyzeResult) {
         List<SQLCondition> conditionsWithBadFormat = new ArrayList<>();

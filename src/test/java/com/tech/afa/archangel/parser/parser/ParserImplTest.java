@@ -1,4 +1,4 @@
-package com.tech.afa.archangel.parser;
+package com.tech.afa.archangel.parser.parser;
 
 import com.tech.afa.archangel.library.model.SQLRequestView;
 import com.tech.afa.archangel.library.model.enums.Condition;

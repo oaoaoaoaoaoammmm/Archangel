@@ -8,6 +8,7 @@ public class StatisticsRepository extends Repository {
     private static final String EXPLAIN_ANALYZE_PREFIX = "EXPLAIN ANALYZE ";
     private static final String EXPLAIN_ANALYZE_BUFFERS_PREFIX = "EXPLAIN (ANALYZE,BUFFERS) ";
     //"EXPLAIN (ANALYZE,BUFFERS,FORMAT JSON) "
+    //"EXPLAIN (ANALYZE,BUFFERS,VERBOSE,SETTINGS,WAL) "
 
     public StatisticsRepository(DataSource dataSource) {
         super(dataSource);
