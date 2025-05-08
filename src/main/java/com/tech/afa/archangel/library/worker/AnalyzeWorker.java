@@ -42,12 +42,6 @@ public interface AnalyzeWorker<T> extends Worker<T, SQLAnalyzeResult> {
             .ifPresent(conds -> conds.forEach(c -> traverseConditions(c, accumulator)));
     }
 
-    default String extractFieldName(String field) {
-        return Arrays.stream(field.split("\\."))
-            .reduce((first, last) -> last)
-            .orElse("");
-    }
-
     default List<String> findUnindexedFields(Table table, List<String> fields) {
         List<String> tableFields = table.getColumns().stream()
             .map(Column::getName)

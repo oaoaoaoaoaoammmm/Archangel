@@ -9,6 +9,7 @@ import com.tech.afa.archangel.library.model.enums.SQLCommandType;
 import com.tech.afa.archangel.library.model.request.SQLOrderBy;
 import com.tech.afa.archangel.library.model.request.SQLRequest;
 import com.tech.afa.archangel.library.model.table.Table;
+import com.tech.afa.archangel.library.utils.SQLUtils;
 import com.tech.afa.archangel.library.worker.AnalyzeWorker;
 import com.tech.afa.archangel.library.worker.AnalyzeWorkerType;
 import com.tech.afa.archangel.library.worker.WorkerSignal;
@@ -43,7 +44,7 @@ public class IndexOrderByCheckerAnalyzeWorker implements AnalyzeWorker<SQLReques
         List<String> orderByFields = sqlRequest.getOrderBy().stream()
             .map(SQLOrderBy::getColumn)
             .filter(this::isSimpleField)
-            .map(this::extractFieldName)
+            .map(SQLUtils::extractFieldName)
             .toList();
         if (orderByFields.isEmpty()) {
             return WorkerSignal.NEXT;

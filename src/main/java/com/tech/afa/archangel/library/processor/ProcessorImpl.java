@@ -4,14 +4,17 @@ import com.tech.afa.archangel.library.analyzer.Analyzer;
 import com.tech.afa.archangel.library.analyzer.StatisticService;
 import com.tech.afa.archangel.library.config.TriggerMode;
 import com.tech.afa.archangel.library.exporter.Exporter;
+import com.tech.afa.archangel.library.model.SQLRequestView;
 import com.tech.afa.archangel.library.model.analyze.SQLAnalyzeResult;
 import com.tech.afa.archangel.library.model.enums.SQLCommandType;
 import com.tech.afa.archangel.library.model.request.SQLRequest;
-import com.tech.afa.archangel.library.model.SQLRequestView;
-import com.tech.afa.archangel.library.model.stats.Statistics;
+import com.tech.afa.archangel.library.model.stats.RequestStatistics;
+import com.tech.afa.archangel.library.model.stats.TableStatistics;
 import com.tech.afa.archangel.library.parser.Parser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,18 +34,22 @@ public class ProcessorImpl implements Processor {
             SQLRequest sqlRequest = parser.parse(sqlView);
             sqlRequest.setExecuteTime(sqlView.executeTime());
             System.out.println(sqlRequest);
-            Statistics stats = statisticService.calculateStatistics(sqlRequest);
+            RequestStatistics reqStats = statisticService.calculateRequestStatistics(sqlRequest);
             if (sqlRequest.getCommandType() != SQLCommandType.UNKNOWN) {
-                boolean trig = stats.getRequestCount() % triggerThreshold == 0;
-                boolean shouldResetStats = stats.getRequestCount() % triggerThreshold == 1;
+                boolean isFirstTime = reqStats.getRequestCount() == 1;
+                boolean trig = reqStats.getRequestCount() % triggerThreshold == 0 || isFirstTime;
+                boolean shouldResetStats = reqStats.getRequestCount() % triggerThreshold == 1;
+                List<TableStatistics> tableStats = statisticService.calculateTablesStatistics(sqlRequest, isFirstTime);
                 if (triggerMode == TriggerMode.BY_COUNT && trig) {
-                    SQLAnalyzeResult sqlAnalyzeResult = analyzer.analyze(sqlRequest, stats);
-                    exporter.export(sqlAnalyzeResult);
+                    SQLAnalyzeResult sqlAnalyzeResult = analyzer.analyze(sqlRequest, reqStats, tableStats);
+                    //if (!isFirstTime) {
+                        exporter.export(sqlAnalyzeResult);
+                    //}
                 } else {
                     // TODO TRIGGER_MODE.BY_TIME... и так далее
                 }
                 if (shouldResetStats) {
-                    stats.reset(sqlView.executeTime());
+                    reqStats.reset(sqlView.executeTime());
                 }
             }
         } catch (Exception ex) {

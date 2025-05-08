@@ -7,7 +7,7 @@ public class SelectIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void test() {
-        String sql = "select * from authors where author_id = 3";
+        String sql = "select name, birth_date from authors where author_id = 3";
         executeSql(sql);
     }
 

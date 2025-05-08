@@ -16,11 +16,9 @@ public class Advice {
     public String toString() {
         return String.format(
             """
-                    [%s][%s] %s
-            """,
-            adviceType.name(),
-            importance.name(),
-            advice
+                [%s][%s] %s
+                """,
+            adviceType.name(), importance.name(), advice
         );
     }
 }

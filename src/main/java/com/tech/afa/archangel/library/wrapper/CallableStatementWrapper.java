@@ -2,7 +2,7 @@ package com.tech.afa.archangel.library.wrapper;
 
 import com.tech.afa.archangel.library.interceptor.Interceptor;
 import com.tech.afa.archangel.library.utils.Pair;
-import com.tech.afa.archangel.library.utils.SqlUtils;
+import com.tech.afa.archangel.library.utils.SQLUtils;
 import com.tech.afa.archangel.library.utils.Timer;
 import lombok.RequiredArgsConstructor;
 
@@ -1221,9 +1221,9 @@ public class CallableStatementWrapper implements CallableStatement {
 
     private String resolveSql(String sql) {
         if (parametersByIndex.isEmpty() && !parametersByName.isEmpty()) {
-            return SqlUtils.resolveSqlParametersByName(sql, parametersByName);
+            return SQLUtils.resolveSqlParametersByName(sql, parametersByName);
         } else if (parametersByName.isEmpty() && !parametersByIndex.isEmpty()) {
-            return SqlUtils.resolveSqlParametersByIndex(sql, parametersByIndex);
+            return SQLUtils.resolveSqlParametersByIndex(sql, parametersByIndex);
         } else {
             return sql;
         }

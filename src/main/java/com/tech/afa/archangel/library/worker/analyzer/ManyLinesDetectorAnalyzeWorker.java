@@ -16,9 +16,9 @@ public class ManyLinesDetectorAnalyzeWorker implements AnalyzeWorker<SQLRequest>
 
     private static final int MAX_LIMIT = 1000;
 
-    private static final String UNBOUNDED_RESULT_WARNING =
+    private static final String UNBOUNDED_RESULT_ADVICE =
         "Query may perform a full table scan - consider adding WHERE conditions or LIMIT clause to restrict the number of rows processed";
-    private static final String LARGE_RESULT_WARNING =
+    private static final String LARGE_RESULT_ADVICE =
         "Query may process up to %d rows which could impact performance - consider adding more specific filters or reducing the LIMIT value";
 
     @Override
@@ -37,10 +37,10 @@ public class ManyLinesDetectorAnalyzeWorker implements AnalyzeWorker<SQLRequest>
         if (sqlRequest.getWhereCondition() == null) {
             Advice advice = new Advice("", AdviceType.GENERAL_OPT, Importance.MEDIUM);
             if (sqlRequest.getLimit() == null) {
-                advice.setAdvice(UNBOUNDED_RESULT_WARNING);
+                advice.setAdvice(UNBOUNDED_RESULT_ADVICE);
                 sqlAnalyzeResult.addAdvice(advice);
             } else if (sqlRequest.getLimit() >= MAX_LIMIT) {
-                advice.setAdvice(LARGE_RESULT_WARNING.formatted(sqlRequest.getLimit()));
+                advice.setAdvice(LARGE_RESULT_ADVICE.formatted(sqlRequest.getLimit()));
                 sqlAnalyzeResult.addAdvice(advice);
             }
         }

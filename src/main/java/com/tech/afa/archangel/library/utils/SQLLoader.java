@@ -8,12 +8,12 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 @NoArgsConstructor(access = AccessLevel.NONE)
-public class SqlLoader {
+public class SQLLoader {
 
     private static final String DIRECTORY = "sql/";
 
     public static String loadSql(String fileName) {
-        try (InputStream inputStream = SqlLoader.class.getClassLoader().getResourceAsStream(DIRECTORY + fileName)) {
+        try (InputStream inputStream = SQLLoader.class.getClassLoader().getResourceAsStream(DIRECTORY + fileName)) {
             if (inputStream == null) {
                 throw new RuntimeException("File not found: " + fileName);
             }

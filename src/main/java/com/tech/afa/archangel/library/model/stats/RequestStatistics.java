@@ -5,20 +5,20 @@ import lombok.AllArgsConstructor;
 import java.util.concurrent.atomic.AtomicLong;
 
 @AllArgsConstructor
-public class Statistics {
-    private AtomicLong requestCount;
-    private AtomicLong minExecuteTimeMs;
-    private AtomicLong maxExecuteTimeMs;
-    private AtomicLong avgExecuteTimeMs;
+public class RequestStatistics {
+    private final AtomicLong requestCount;
+    private final AtomicLong minExecuteTimeMs;
+    private final AtomicLong maxExecuteTimeMs;
+    private final AtomicLong avgExecuteTimeMs;
 
-    public Statistics() {
+    public RequestStatistics() {
         this.requestCount = new AtomicLong(0);
         this.minExecuteTimeMs = new AtomicLong(Long.MAX_VALUE);
         this.maxExecuteTimeMs = new AtomicLong(Long.MIN_VALUE);
         this.avgExecuteTimeMs = new AtomicLong(1);
     }
 
-    public Statistics reset(long executeTime) {
+    public RequestStatistics reset(long executeTime) {
         this.minExecuteTimeMs.set(executeTime);
         this.maxExecuteTimeMs.set(executeTime);
         this.avgExecuteTimeMs.set(executeTime);
@@ -41,7 +41,7 @@ public class Statistics {
         return this.avgExecuteTimeMs.get();
     }
 
-    public long incrementRequestCount() {
+    public long incrementRequestCountAndGet() {
         return this.requestCount.incrementAndGet();
     }
 

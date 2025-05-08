@@ -3,7 +3,8 @@ package com.tech.afa.archangel.library.analyzer;
 import com.tech.afa.archangel.library.context.ArchangelContext;
 import com.tech.afa.archangel.library.model.analyze.SQLAnalyzeResult;
 import com.tech.afa.archangel.library.model.request.SQLRequest;
-import com.tech.afa.archangel.library.model.stats.Statistics;
+import com.tech.afa.archangel.library.model.stats.RequestStatistics;
+import com.tech.afa.archangel.library.model.stats.TableStatistics;
 import com.tech.afa.archangel.library.repository.StatisticsRepository;
 import com.tech.afa.archangel.library.worker.AnalyzeWorker;
 import com.tech.afa.archangel.library.worker.AnalyzeWorkerType;
@@ -11,11 +12,14 @@ import com.tech.afa.archangel.library.worker.WorkerStarter;
 import com.tech.afa.archangel.library.worker.analyzer.ExecutionPlanAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.IndexGroupByCheckerAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.IndexOrderByCheckerAnalyzeWorker;
+import com.tech.afa.archangel.library.worker.analyzer.IndexStatisticsCollectorAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.IndexWhereCheckerAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.ManyLinesDetectorAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.StarDetectorAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.SubSelectResearchAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.TransformConditionAnalyzeWorker;
+import com.tech.afa.archangel.library.worker.analyzer.global.UnusableFieldDetectorAnalyzeWorker;
+import com.tech.afa.archangel.library.worker.analyzer.global.UnusableIndexDetectorAnalyzeWorker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,10 +46,11 @@ public class AnalyzerImpl implements Analyzer {
     }
 
     @Override
-    public SQLAnalyzeResult analyze(SQLRequest request, Statistics stats) {
-        context.put(request.getId(), request, stats);
+    public SQLAnalyzeResult analyze(SQLRequest request, RequestStatistics reqStats, List<TableStatistics> tableStats) {
+        context.put(request.getId(), request, reqStats);
         AnalyzeWorkerType workerType = AnalyzeWorkerType.valueOf(request.getCommandType().name());
-        SQLAnalyzeResult result = new SQLAnalyzeResult(request.getId(), request.getNativeSql(), stats);
+        SQLAnalyzeResult result = new SQLAnalyzeResult(
+            request.getId(), request.getNativeSql(), reqStats, tableStats);
         WorkerStarter.startWork(request, result, workers.get(workerType));
         return result;
     }
@@ -54,16 +59,22 @@ public class AnalyzerImpl implements Analyzer {
         Map<AnalyzeWorkerType, List<AnalyzeWorker<SQLRequest>>> map = new HashMap<>();
         StatisticsRepository statisticsRepository = new StatisticsRepository(dataSource);
         ExecutionPlanAnalyzeWorker executionPlanAnalyzeWorker = new ExecutionPlanAnalyzeWorker(statisticsRepository);
+        IndexStatisticsCollectorAnalyzeWorker indexStatisticsCollectorAnalyzeWorker = new IndexStatisticsCollectorAnalyzeWorker(context);
         ManyLinesDetectorAnalyzeWorker manyLinesDetectorAnalyzeWorker = new ManyLinesDetectorAnalyzeWorker();
         IndexWhereCheckerAnalyzeWorker indexWhereCheckerAnalyzeWorker = new IndexWhereCheckerAnalyzeWorker(context);
-        TransformConditionAnalyzeWorker transformConditionAnalyzeWorker = new TransformConditionAnalyzeWorker(context);
+        TransformConditionAnalyzeWorker transformConditionAnalyzeWorker = new TransformConditionAnalyzeWorker();
         SubSelectResearchAnalyzeWorker subSelectResearchAnalyzeWorker = new SubSelectResearchAnalyzeWorker(map);
+        UnusableFieldDetectorAnalyzeWorker unusableFieldDetectorAnalyzeWorker = new UnusableFieldDetectorAnalyzeWorker(context);
+        UnusableIndexDetectorAnalyzeWorker unusableIndexDetectorAnalyzeWorker = new UnusableIndexDetectorAnalyzeWorker(context);
         List<AnalyzeWorker<SQLRequest>> general = new ArrayList<>();
         general.add(executionPlanAnalyzeWorker);
+        general.add(indexStatisticsCollectorAnalyzeWorker);
         general.add(manyLinesDetectorAnalyzeWorker);
         general.add(indexWhereCheckerAnalyzeWorker);
         general.add(transformConditionAnalyzeWorker);
         general.add(subSelectResearchAnalyzeWorker);
+        general.add(unusableFieldDetectorAnalyzeWorker);
+        general.add(unusableIndexDetectorAnalyzeWorker);
         List<AnalyzeWorker<SQLRequest>> select = new ArrayList<>(general);
         StarDetectorAnalyzeWorker starDetectorAnalyzeWorker = new StarDetectorAnalyzeWorker();
         IndexOrderByCheckerAnalyzeWorker indexOrderByCheckerAnalyzeWorker = new IndexOrderByCheckerAnalyzeWorker(context);

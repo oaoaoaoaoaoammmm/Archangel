@@ -1,14 +1,10 @@
 package com.tech.afa.archangel.library.repository;
 
-import com.tech.afa.archangel.library.utils.SqlLoader;
+import com.tech.afa.archangel.library.utils.SQLLoader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -58,7 +54,7 @@ abstract class Repository {
         PreparedStatementConsumer preparer,
         ResultSetMapper<T> mapper
     ) {
-        String sql = SqlLoader.loadSql(sqlFile);
+        String sql = SQLLoader.loadSql(sqlFile);
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             preparer.accept(ps);

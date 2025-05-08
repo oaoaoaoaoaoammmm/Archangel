@@ -53,7 +53,7 @@ $$
         pub_year       INT;
         author         INT;
     BEGIN
-        FOR i IN 1..1000000
+        FOR i IN 1..100000
             LOOP
                 IF i % 100000 = 0 THEN
                     book_title := special_titles[(i / 100000)::INT];
