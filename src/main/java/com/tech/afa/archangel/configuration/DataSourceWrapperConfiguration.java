@@ -24,13 +24,10 @@ public class DataSourceWrapperConfiguration {
     public DataSource dataSourceWrapper(DataSource dataSource, ArchangelProperties properties) {
         ArchangelConfigurationProperties archangelProps = new ArchangelConfigurationProperties(
             properties.getSchema(),
+            properties.getDelayToRefreshSchemaSec(),
             properties.getTriggerThreshold(),
             properties.getTriggerMode()
         );
-        return new Archangel(
-            dataSource,
-            properties.getSchema(),
-            archangelProps
-        ).getWrapperDataSource();
+        return new Archangel(dataSource, archangelProps).getWrapperDataSource();
     }
 }

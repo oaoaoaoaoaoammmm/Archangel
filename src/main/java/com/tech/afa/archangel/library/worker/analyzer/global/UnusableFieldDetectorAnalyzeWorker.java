@@ -21,7 +21,7 @@ import java.util.List;
 public class UnusableFieldDetectorAnalyzeWorker implements AnalyzeWorker<SQLRequest> {
 
     private static final String STAR = "*";
-    private static final String UNUSABLE_FIELD_ADVICE = "Table %s has unused field(s) - %s";
+    private static final String UNUSABLE_FIELD_ADVICE = "Table '%s' has unused field(s) - %s.";
 
     private final ArchangelContext context;
 

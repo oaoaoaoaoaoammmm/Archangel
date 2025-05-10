@@ -28,20 +28,6 @@ abstract class Repository {
             while (rs.next()) {
                 result.append(rs.getString(1)).append("\n");
             }
-            /*
-            while (rs.next()) {
-                try (InputStream is = rs.getAsciiStream(1);
-                     BufferedReader reader = new BufferedReader(new InputStreamReader(is))
-                ) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        result.append(line).append("\n");
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-             */
             return result.toString();
         } catch (SQLException ex) {
             log.error("Error executing SQL", ex);

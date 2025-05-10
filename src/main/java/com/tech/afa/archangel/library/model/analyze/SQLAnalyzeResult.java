@@ -55,7 +55,7 @@ public class SQLAnalyzeResult {
 
     private String formatTableStatistics(List<TableStatistics> stats) {
         if (stats == null || stats.isEmpty()) {
-            return "    No table statistics available";
+            return "No table statistics available";
         }
         StringBuilder sb = new StringBuilder();
         stats.forEach(stat -> sb.append(stat.toString()));
@@ -64,7 +64,7 @@ public class SQLAnalyzeResult {
 
     private String formatAdvices(List<Advice> advices) {
         if (advices == null || advices.isEmpty()) {
-            return "        No advice available";
+            return "No advice available";
         }
         StringBuilder sb = new StringBuilder();
         sb.append("{\n");
@@ -75,7 +75,7 @@ public class SQLAnalyzeResult {
 
     private String formatExecutionPlan(String executionPlan) {
         if (executionPlan == null || executionPlan.isEmpty()) {
-            return "    No execution plan available";
+            return "No execution plan available";
         }
         String formattedPlan = executionPlan.lines()
             .map(line -> "        " + line)

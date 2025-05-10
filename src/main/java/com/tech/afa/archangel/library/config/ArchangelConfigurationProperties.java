@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ArchangelConfigurationProperties {
     private String schema;
-    private int triggerThreshold = 1;
+    private long delayToRefreshSchemaSec = 600;
+    private long triggerThreshold = 1;
     private TriggerMode triggerMode = TriggerMode.BY_COUNT;
 }
+

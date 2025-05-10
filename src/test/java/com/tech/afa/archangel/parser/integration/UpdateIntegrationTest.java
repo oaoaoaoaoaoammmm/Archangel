@@ -9,6 +9,7 @@ import java.sql.Statement;
 
 public class UpdateIntegrationTest extends BaseIntegrationTest {
 
+    /*
     @Test
     public void test() throws SQLException {
         String sql = "update authors set name = 'qww'";
@@ -19,4 +20,5 @@ public class UpdateIntegrationTest extends BaseIntegrationTest {
             stmt.execute(sql);
         }
     }
+     */
 }

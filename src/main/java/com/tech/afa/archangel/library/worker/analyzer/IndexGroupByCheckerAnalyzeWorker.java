@@ -21,8 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class IndexGroupByCheckerAnalyzeWorker implements AnalyzeWorker<SQLRequest> {
 
-    private static final String ADVICE = "The GROUP BY clause filters on field '%s' which is not indexed, potentially causing full table scan";
-    private static final String ADVICE_COMPOSITE = "The GROUP BY clause filters on fields '%s' which is not indexed, potentially causing full table scan, maybe using composite index";
+    private static final String ADVICE = "The GROUP BY clause filters on field '%s' which is not indexed on table '%s', potentially causing full table scan.";
+    private static final String ADVICE_COMPOSITE = "The GROUP BY clause filters on fields '%s' which is not indexed on table '%s', potentially causing full table scan, maybe using composite index.";
 
     private final ArchangelContext context;
 
@@ -64,14 +64,14 @@ public class IndexGroupByCheckerAnalyzeWorker implements AnalyzeWorker<SQLReques
         if (unindexedFields.isEmpty()) {
             return;
         }
-        String advice = createAdviceMessage(unindexedFields);
+        String advice = createAdviceMessage(table.getName(),unindexedFields);
         result.addAdvice(new Advice(advice, AdviceType.INDEX_OPT, Importance.MEDIUM));
     }
 
-    private String createAdviceMessage(List<String> unindexedFields) {
+    private String createAdviceMessage(String tableName, List<String> unindexedFields) {
         if (unindexedFields.size() == 1) {
-            return String.format(ADVICE, unindexedFields.getFirst());
+            return String.format(ADVICE, unindexedFields.getFirst(), tableName);
         }
-        return String.format(ADVICE_COMPOSITE, String.join(", ", unindexedFields));
+        return String.format(ADVICE_COMPOSITE, String.join(", ", unindexedFields), tableName);
     }
 }

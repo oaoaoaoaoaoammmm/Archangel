@@ -17,9 +17,9 @@ public class ManyLinesDetectorAnalyzeWorker implements AnalyzeWorker<SQLRequest>
     private static final int MAX_LIMIT = 1000;
 
     private static final String UNBOUNDED_RESULT_ADVICE =
-        "Query may perform a full table scan - consider adding WHERE conditions or LIMIT clause to restrict the number of rows processed";
+        "Query may perform a full table '%s' scan - consider adding WHERE conditions or LIMIT clause to restrict the number of rows processed.";
     private static final String LARGE_RESULT_ADVICE =
-        "Query may process up to %d rows which could impact performance - consider adding more specific filters or reducing the LIMIT value";
+        "Query may process up to %d rows from table '%s' which could impact performance - consider adding more specific filters or reducing the LIMIT value.";
 
     @Override
     public AnalyzeWorkerType getAnalyzeWorkerType() {
@@ -34,16 +34,18 @@ public class ManyLinesDetectorAnalyzeWorker implements AnalyzeWorker<SQLRequest>
 
     @Override
     public WorkerSignal work(SQLRequest sqlRequest, SQLAnalyzeResult sqlAnalyzeResult) {
+        sqlRequest.getTables().forEach(table -> {
         if (sqlRequest.getWhereCondition() == null) {
             Advice advice = new Advice("", AdviceType.GENERAL_OPT, Importance.MEDIUM);
             if (sqlRequest.getLimit() == null) {
-                advice.setAdvice(UNBOUNDED_RESULT_ADVICE);
+                advice.setAdvice(UNBOUNDED_RESULT_ADVICE.formatted(table));
                 sqlAnalyzeResult.addAdvice(advice);
             } else if (sqlRequest.getLimit() >= MAX_LIMIT) {
-                advice.setAdvice(LARGE_RESULT_ADVICE.formatted(sqlRequest.getLimit()));
+                advice.setAdvice(LARGE_RESULT_ADVICE.formatted(sqlRequest.getLimit(), table));
                 sqlAnalyzeResult.addAdvice(advice);
             }
         }
+        });
         return WorkerSignal.NEXT;
     }
 }

@@ -13,7 +13,7 @@ import com.tech.afa.archangel.library.worker.WorkerSignal;
 public class StarDetectorAnalyzeWorker implements AnalyzeWorker<SQLRequest> {
 
     private static final String WILDCARD_USAGE_ADVICE =
-        "Using '*' to select all columns may impact performance - explicitly specify only required columns";
+        "Using '*' to select all columns may impact performance - explicitly specify only required columns.";
 
     @Override
     public AnalyzeWorkerType getAnalyzeWorkerType() {

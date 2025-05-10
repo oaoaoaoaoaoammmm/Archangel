@@ -10,6 +10,24 @@
       "name": "spring.archangel.schema",
       "type": "java.lang.String",
       "description": "Database schema"
+    },
+    {
+      "name": "spring.archangel.delay-to-refresh-schema-sec",
+      "type": "java.lang.Long",
+      "description": "Schema update interval",
+      "defaultValue": 600
+    },
+    {
+      "name": "spring.archangel.trigger-threshold",
+      "type": "java.lang.Long",
+      "description": "Schema update interval",
+      "defaultValue": 1
+    },
+    {
+      "name": "spring.archangel.schema",
+      "type": "com.tech.afa.archangel.library.config.TriggerMode",
+      "description": "Trigger mode",
+      "defaultValue": "TriggerMode.BY_COUNT"
     }
   ]
 }

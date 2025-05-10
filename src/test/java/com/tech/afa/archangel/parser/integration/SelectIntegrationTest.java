@@ -6,11 +6,77 @@ import org.junit.jupiter.api.Test;
 public class SelectIntegrationTest extends BaseIntegrationTest {
 
     @Test
-    public void test() {
-        String sql = "select name, birth_date from authors where author_id = 3";
-        executeSql(sql);
+    public void default_test_no_advices() {
+        String sql = "select name, country, birth_date from authors where author_id = ?;";
+        executeQuery(sql, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+        //executeQuery(sql, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
     }
 
+    @Test
+    public void advice_about_star() {
+        String sql = "select * from authors where author_id = ?;";
+        executeQuery(sql, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+        //executeQuery(sql, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+    }
+
+    @Test
+    public void advice_about_unused_fields() {
+        String sql2 = "select country, birth_date from authors where author_id = ?;";
+        executeQuery(sql2, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+        //executeQuery(sql2, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+    }
+
+    @Test
+    public void advice_about_unused_fields_for_some_requests() {
+        String sql = "select birth_date from authors where author_id = ?;";
+        String sql2 = "select name from authors where author_id = ?;";
+        executeQuery(sql, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+        executeQuery(sql2, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+        //executeQuery(sql2, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+    }
+
+    @Test
+    public void advices_about_unused_indexes_on_authors_table_because_it_small() {
+        String sql = "create index idx_author_name on authors(name);";
+        String sql2 = "select name, country, birth_date from authors where author_id = ?;";
+        executeCommand(sql);
+        this.forceRefreshSchema();
+        executeQuery(sql2, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+        //executeQuery(sql2, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+    }
+
+    @Test
+    public void advices_about_unused_index() {
+        String sql = "create index idx_books_title on books(title);";
+        String sql2 = "select title, publication_year, author_id from books where book_id = ?;";
+        executeCommand(sql);
+        this.forceRefreshSchema();
+        executeQuery(sql2, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+        //executeQuery(sql2, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+    }
+
+    /*
+    @Test
+    public void advices_about_unused_index() {
+        String sql = "create index idx_author_name on authors(name);";
+        String sql2 = "select name, country, birth_date from authors where author_id = ?;";
+        executeCommand(sql);
+        this.forceRefreshSchema();
+        executeQuery(sql2, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+        executeQuery(sql2, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+    }
+
+    @Test
+    public void advices_about_add_index() {
+        String sql = "select country, birth_date from authors where author_id = ?;";
+        String sql2 = "select author_id, country, birth_date from authors where name = ?;";
+        executeQuery(sql, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+        executeQuery(sql2, ps -> ps.setString(1, "Лев Толстой"), this.getEmptyResultSetMapper());
+        executeQuery(sql2, ps -> ps.setString(1, "Лев Толстой"), this.getEmptyResultSetMapper());
+    }
+
+     */
+    /*
     @Test
     public void test_0() {
         String sql = "select * from authors where name = 'author name'";
@@ -96,4 +162,6 @@ public class SelectIntegrationTest extends BaseIntegrationTest {
         String sql = "select * from authors where lower(name) = 'author name'";
         executeSql(sql);
     }
+
+     */
 }
