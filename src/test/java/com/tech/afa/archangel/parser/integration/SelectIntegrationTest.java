@@ -46,13 +46,25 @@ public class SelectIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void advices_about_unused_index() {
+    public void advice_about_unused_index() {
         String sql = "create index idx_books_title on books(title);";
         String sql2 = "select title, publication_year, author_id from books where book_id = ?;";
         executeCommand(sql);
         this.forceRefreshSchema();
         executeQuery(sql2, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
         //executeQuery(sql2, ps -> ps.setInt(1, 1), this.getEmptyResultSetMapper());
+    }
+
+    @Test
+    public void advices_about_add_index_on_title_unused_fields_and_index() {
+        String sql = """
+        select name, country, birth_date
+        from authors
+        where author_id = (select b.author_id
+                           from books b
+                           where title = ?);
+        """;
+        executeQuery(sql, ps -> ps.setString(1, "Война и мир"), this.getEmptyResultSetMapper());
     }
 
     /*

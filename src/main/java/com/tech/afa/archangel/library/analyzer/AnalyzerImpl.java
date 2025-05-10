@@ -17,6 +17,7 @@ import com.tech.afa.archangel.library.worker.analyzer.IndexWhereCheckerAnalyzeWo
 import com.tech.afa.archangel.library.worker.analyzer.ManyLinesDetectorAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.StarDetectorAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.SubSelectResearchAnalyzeWorker;
+import com.tech.afa.archangel.library.worker.analyzer.TableStatisticsCollectorAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.TransformConditionAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.global.UnusableFieldDetectorAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.global.UnusableIndexDetectorAnalyzeWorker;
@@ -60,6 +61,7 @@ public class AnalyzerImpl implements Analyzer {
         StatisticsRepository statisticsRepository = new StatisticsRepository(dataSource);
         ExecutionPlanAnalyzeWorker executionPlanAnalyzeWorker = new ExecutionPlanAnalyzeWorker(statisticsRepository);
         IndexStatisticsCollectorAnalyzeWorker indexStatisticsCollectorAnalyzeWorker = new IndexStatisticsCollectorAnalyzeWorker(context);
+        TableStatisticsCollectorAnalyzeWorker tableStatisticsCollectorAnalyzeWorker = new TableStatisticsCollectorAnalyzeWorker(context);
         ManyLinesDetectorAnalyzeWorker manyLinesDetectorAnalyzeWorker = new ManyLinesDetectorAnalyzeWorker();
         IndexWhereCheckerAnalyzeWorker indexWhereCheckerAnalyzeWorker = new IndexWhereCheckerAnalyzeWorker(context);
         TransformConditionAnalyzeWorker transformConditionAnalyzeWorker = new TransformConditionAnalyzeWorker();
@@ -69,6 +71,7 @@ public class AnalyzerImpl implements Analyzer {
         List<AnalyzeWorker<SQLRequest>> general = new ArrayList<>();
         general.add(executionPlanAnalyzeWorker);
         general.add(indexStatisticsCollectorAnalyzeWorker);
+        general.add(tableStatisticsCollectorAnalyzeWorker);
         general.add(manyLinesDetectorAnalyzeWorker);
         general.add(indexWhereCheckerAnalyzeWorker);
         general.add(transformConditionAnalyzeWorker);

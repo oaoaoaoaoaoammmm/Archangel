@@ -59,9 +59,6 @@ public class SubSelectResearchAnalyzeWorker implements AnalyzeWorker<SQLRequest>
     }
 
     private void foreachSubSelectInCondition(SQLCondition condition, SQLAnalyzeResult sqlAnalyzeResult) {
-        if (condition.getSubSelect() != null) {
-            startSubSelectAnalyze(condition.getSubSelect(), sqlAnalyzeResult);
-        }
         List<SQLCondition> conditions = new ArrayList<>();
         traverseConditions(condition, conditions);
         conditions.stream()
@@ -71,6 +68,7 @@ public class SubSelectResearchAnalyzeWorker implements AnalyzeWorker<SQLRequest>
     }
 
     private void startSubSelectAnalyze(SQLRequest sqlRequest, SQLAnalyzeResult sqlAnalyzeResult) {
+        System.out.println(sqlRequest);
         SQLCommandType commandType = sqlRequest.getCommandType();
         AnalyzeWorkerType workerType = AnalyzeWorkerType.valueOf(commandType.name());
         WorkerStarter.startWork(sqlRequest, sqlAnalyzeResult, workers.get(workerType));

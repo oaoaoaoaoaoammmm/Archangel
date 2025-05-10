@@ -41,15 +41,16 @@ $$
     BEGIN
         FOR i IN 1..100000
             LOOP
-                IF i % 10000 = 0 AND i / 10000 < array_length(special_authors, 1) THEN
-                    current_author_id := special_authors[i / 10000 + 1];
-                    book_title := special_books[i / 10000 + 1];
+                IF (i - 1) % 10000 = 0 AND (i - 1) / 10000 < array_length(special_authors, 1) THEN
+                    current_author_id := special_authors[(i - 1) / 10000 + 1];
+                    book_title := special_books[(i - 1) / 10000 + 1];
                 ELSE
-                    current_author_id := 1 + floor(random() * author_count)::INT;
+                    current_author_id := 1 + floor(random() * author_count)::INT % author_count;
                     book_title := 'book_' || i;
                 END IF;
+
                 INSERT INTO books (title, publication_year, author_id)
-                VALUES (book_title, 1900 + (i % 124), current_author_id);
+                VALUES (book_title, 1900 + (i % 126), current_author_id);
             END LOOP;
     END
 $$;

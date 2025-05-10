@@ -38,7 +38,7 @@ public class ProcessorImpl implements Processor {
                 boolean isFirstTime = reqStats.getRequestCount() == 1;
                 boolean trig = reqStats.getRequestCount() % triggerThreshold == 0 || isFirstTime;
                 boolean shouldResetStats = reqStats.getRequestCount() % triggerThreshold == 1;
-                List<TableStatistics> tableStats = statisticService.calculateTablesStatistics(sqlRequest, isFirstTime);
+                List<TableStatistics> tableStats = statisticService.calculateTablesStatistics(sqlRequest);
                 if (triggerMode == TriggerMode.BY_COUNT && trig) {
                     SQLAnalyzeResult sqlAnalyzeResult = analyzer.analyze(sqlRequest, reqStats, tableStats);
                     //if (!isFirstTime) {

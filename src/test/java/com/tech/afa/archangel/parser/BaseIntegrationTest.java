@@ -2,7 +2,6 @@ package com.tech.afa.archangel.parser;
 
 import com.tech.afa.archangel.library.Archangel;
 import com.tech.afa.archangel.library.config.ArchangelConfigurationProperties;
-import com.tech.afa.archangel.library.context.ArchangelContext;
 import com.tech.afa.archangel.parser.utils.PreparedStatementConsumer;
 import com.tech.afa.archangel.parser.utils.ResultSetMapper;
 import com.zaxxer.hikari.HikariConfig;

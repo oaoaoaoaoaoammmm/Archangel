@@ -47,9 +47,9 @@ public class SQLAnalyzeResult {
                     Advices: %s
                     Execution Plan: %s
                 }""",
-            formatTableStatistics(tableStatistics),
-            id, nativeSql, requestStatistics,
-            formatAdvices(advices), formatExecutionPlan(executionPlan)
+            formatTableStatistics(tableStatistics), id,
+            nativeSql.replaceAll("\\s+", " "),
+            requestStatistics, formatAdvices(advices), formatExecutionPlan(executionPlan)
         );
     }
 
