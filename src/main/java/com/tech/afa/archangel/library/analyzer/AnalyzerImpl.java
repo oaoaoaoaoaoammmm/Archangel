@@ -72,9 +72,9 @@ public class AnalyzerImpl implements Analyzer {
         general.add(manyLinesDetectorAnalyzeWorker);
         general.add(indexWhereCheckerAnalyzeWorker);
         general.add(transformConditionAnalyzeWorker);
-        general.add(subSelectResearchAnalyzeWorker);
         general.add(unusableFieldDetectorAnalyzeWorker);
         general.add(unusableIndexDetectorAnalyzeWorker);
+        general.add(subSelectResearchAnalyzeWorker);
         List<AnalyzeWorker<SQLRequest>> select = new ArrayList<>(general);
         StarDetectorAnalyzeWorker starDetectorAnalyzeWorker = new StarDetectorAnalyzeWorker();
         IndexOrderByCheckerAnalyzeWorker indexOrderByCheckerAnalyzeWorker = new IndexOrderByCheckerAnalyzeWorker(context);

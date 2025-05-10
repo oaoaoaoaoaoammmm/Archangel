@@ -1,6 +1,7 @@
 package com.tech.afa.archangel.parser;
 
 import com.tech.afa.archangel.library.Archangel;
+import com.tech.afa.archangel.library.config.ArchangelConfigurationProperties;
 import com.tech.afa.archangel.library.config.TriggerMode;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -49,7 +50,7 @@ public abstract class BaseIntegrationTest {
         config.setPassword(postgres.getPassword());
         config.setMaximumPoolSize(10);
         DataSource ds = new HikariDataSource(config);
-        dataSource = new Archangel(ds, "public", 1, TriggerMode.BY_COUNT)
+        dataSource = new Archangel(ds, "public",new ArchangelConfigurationProperties())
             .getWrapperDataSource();
     }
 

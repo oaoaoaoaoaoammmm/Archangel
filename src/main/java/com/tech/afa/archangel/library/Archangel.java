@@ -3,6 +3,7 @@ package com.tech.afa.archangel.library;
 import com.tech.afa.archangel.library.analyzer.Analyzer;
 import com.tech.afa.archangel.library.analyzer.AnalyzerImpl;
 import com.tech.afa.archangel.library.analyzer.StatisticService;
+import com.tech.afa.archangel.library.config.ArchangelConfigurationProperties;
 import com.tech.afa.archangel.library.config.TriggerMode;
 import com.tech.afa.archangel.library.context.ArchangelContext;
 import com.tech.afa.archangel.library.exporter.Exporter;
@@ -43,7 +44,7 @@ public class Archangel {
 
     private final DataSource wrapperDataSource;
 
-    public Archangel(DataSource dataSource, String schema, int triggerThreshold, TriggerMode triggerMode) {
+    public Archangel(DataSource dataSource, String schema, ArchangelConfigurationProperties archangelProperties) {
         this.schema = schema;
         this.originalDataSource = dataSource;
 
@@ -58,7 +59,7 @@ public class Archangel {
         IdGenerator idGenerator = new IdGenerator();
         StatisticService statisticService = new StatisticService(archangelContext);
         Analyzer analyzer = new AnalyzerImpl(dataSource, archangelContext);
-        Processor processor = new ProcessorImpl(triggerThreshold, triggerMode, parser, exporter, analyzer, statisticService);
+        Processor processor = new ProcessorImpl(archangelProperties.getTriggerThreshold(), archangelProperties.getTriggerMode(), parser, exporter, analyzer, statisticService);
         Interceptor interceptor = new InterceptorImpl(processor, idGenerator);
         this.wrapperDataSource = new DataSourceWrapper(dataSource, interceptor);
     }
