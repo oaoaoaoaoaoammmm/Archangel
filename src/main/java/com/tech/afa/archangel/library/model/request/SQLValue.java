@@ -14,7 +14,7 @@ public class SQLValue {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("SQLValue {");
-        if (rawValue != null) sb.append("rawValue='").append(rawValue).append("'");
+        if (rawValue != null) sb.append("rawValue=").append(rawValue);
         if (selectRequest != null) sb.append(sb.length() > 10 ? " " : "").append("selectRequest=").append(selectRequest);
         return sb.append("}").toString();
     }

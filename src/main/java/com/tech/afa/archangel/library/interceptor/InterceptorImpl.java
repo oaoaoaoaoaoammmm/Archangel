@@ -32,6 +32,7 @@ public class InterceptorImpl implements Interceptor {
         processor.processing(new SQLRequestView(id, sql, executeTime));
     }
 
+    @Override
     public void intercept(String sql, String nativeSql, long executeTime) {
         String id = idGenerator.getId(sql);
         processor.processing(new SQLRequestView(id, nativeSql, executeTime));

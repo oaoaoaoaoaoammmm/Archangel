@@ -17,6 +17,11 @@ public class Index {
     private List<String> fieldNames;
     private String definition;
 
+    public boolean hasField(String fieldName) {
+        return getFieldNames().stream()
+            .anyMatch(col -> col.equals(fieldName));
+    }
+
     @Override
     public String toString() {
         return "name: " + name + " | type: " + type +

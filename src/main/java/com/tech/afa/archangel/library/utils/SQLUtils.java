@@ -9,11 +9,29 @@ import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.SQLXML;
 import java.time.temporal.TemporalAccessor;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class SqlUtils {
+public final class SQLUtils {
+
+    public static String extractFieldName(String field) {
+        return Arrays.stream(field.split("\\."))
+            .reduce((first, last) -> last)
+            .orElse("");
+    }
+
+    public static String extractSchemaAndFieldName(String input) {
+        String[] parts = input.split("\\.");
+        if (parts.length == 3) {
+            return parts[1] + "." + parts[2];
+        } else if (parts.length == 2 || parts.length == 1) {
+            return input;
+        } else {
+            return parts[parts.length - 2] + "." + parts[parts.length - 1];
+        }
+    }
 
     public static String resolveSqlParametersByName(String sql, Map<String, Object> parameters) {
         String resolved = sql;

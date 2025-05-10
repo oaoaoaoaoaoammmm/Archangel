@@ -1,5 +1,6 @@
 package com.tech.afa.archangel.library.model.table;
 
+import com.tech.afa.archangel.library.model.stats.TableStatistics;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -12,6 +13,19 @@ public class Table {
     private String name;
     private List<Column> columns;
     private List<Index> indexes;
+
+    private TableStatistics statistics;
+
+    public Table(String schema, String name) {
+        this.schema = schema;
+        this.name = name;
+        this.statistics = new TableStatistics(name);
+    }
+
+    public boolean hasColumn(String columnName) {
+        return getColumns().stream()
+            .anyMatch(col -> col.getName().equals(columnName));
+    }
 
     @Override
     public String toString() {

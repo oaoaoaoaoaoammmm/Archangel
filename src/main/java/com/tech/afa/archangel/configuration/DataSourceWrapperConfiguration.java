@@ -1,6 +1,7 @@
 package com.tech.afa.archangel.configuration;
 
 import com.tech.afa.archangel.library.Archangel;
+import com.tech.afa.archangel.library.config.ArchangelConfigurationProperties;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
 import org.springframework.context.annotation.Bean;
@@ -21,11 +22,15 @@ public class DataSourceWrapperConfiguration {
     @Bean
     @Primary
     public DataSource dataSourceWrapper(DataSource dataSource, ArchangelProperties properties) {
-        return new Archangel(
-            dataSource,
+        ArchangelConfigurationProperties archangelProps = new ArchangelConfigurationProperties(
             properties.getSchema(),
             properties.getTriggerThreshold(),
             properties.getTriggerMode()
+        );
+        return new Archangel(
+            dataSource,
+            properties.getSchema(),
+            archangelProps
         ).getWrapperDataSource();
     }
 }

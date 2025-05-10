@@ -1,7 +1,7 @@
 package com.tech.afa.archangel.library.context;
 
 import com.tech.afa.archangel.library.model.request.SQLRequest;
-import com.tech.afa.archangel.library.model.stats.Statistics;
+import com.tech.afa.archangel.library.model.stats.RequestStatistics;
 import com.tech.afa.archangel.library.model.table.Table;
 import com.tech.afa.archangel.library.utils.Pair;
 import lombok.NonNull;
@@ -13,7 +13,7 @@ public class ArchangelContext {
 
     private final Map<String, Table> tables;
 
-    private final Map<String, Pair<SQLRequest, Statistics>> requests;
+    private final Map<String, Pair<SQLRequest, RequestStatistics>> requests;
 
     public ArchangelContext(@NonNull Map<String, Table> tables) {
         this.requests = new ConcurrentHashMap<>();
@@ -26,16 +26,16 @@ public class ArchangelContext {
     }
 
     public SQLRequest getRequest(@NonNull String id) {
-        Pair<SQLRequest, Statistics> pair = requests.get(id);
+        Pair<SQLRequest, RequestStatistics> pair = requests.get(id);
         return pair != null ? pair.first() : null;
     }
 
-    public Statistics getStatistics(@NonNull String id) {
-        Pair<SQLRequest, Statistics> pair = requests.get(id);
+    public RequestStatistics getStatistics(@NonNull String id) {
+        Pair<SQLRequest, RequestStatistics> pair = requests.get(id);
         return pair != null ? pair.second() : null;
     }
 
-    public Pair<SQLRequest, Statistics> getPair(@NonNull String id) {
+    public Pair<SQLRequest, RequestStatistics> getPair(@NonNull String id) {
         return requests.get(id);
     }
 
@@ -47,9 +47,9 @@ public class ArchangelContext {
     }
      */
 
-    public Pair<SQLRequest, Statistics> put(@NonNull String id, @NonNull SQLRequest request, @NonNull Statistics statistics) {
+    public Pair<SQLRequest, RequestStatistics> put(@NonNull String id, @NonNull SQLRequest request, @NonNull RequestStatistics requestStatistics) {
         //if (!requests.containsKey(id)) {
-            Pair<SQLRequest, Statistics> pair = new Pair<>(request, statistics);
+            Pair<SQLRequest, RequestStatistics> pair = new Pair<>(request, requestStatistics);
             requests.put(id, pair);
             return pair;
         //}

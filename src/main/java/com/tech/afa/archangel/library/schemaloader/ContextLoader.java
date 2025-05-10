@@ -16,7 +16,7 @@ public class ContextLoader {
     public ArchangelContext loadContext(String schema) {
         Map<String, Table> tables = new HashMap<>();
         schemaRepository.loadTables(schema).forEach(table ->
-            tables.put(table, new Table(schema, table, null, null))
+            tables.put(table, new Table(schema, table))
         );
         schemaRepository.loadColumns(schema).forEach((table, columns) ->
             tables.get(table).setColumns(columns)
