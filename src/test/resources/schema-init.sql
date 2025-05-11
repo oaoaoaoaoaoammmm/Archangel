@@ -39,11 +39,11 @@ $$
             'Мёртвые души', 'Мастер и Маргарита', 'Один день Ивана Денисовича', 'Старик и море', 'Приключения Тома Сойера'
             ];
     BEGIN
-        FOR i IN 1..100000
+        FOR i IN 1..1000000
             LOOP
-                IF (i - 1) % 10000 = 0 AND (i - 1) / 10000 < array_length(special_authors, 1) THEN
-                    current_author_id := special_authors[(i - 1) / 10000 + 1];
-                    book_title := special_books[(i - 1) / 10000 + 1];
+                IF (i - 1) % 100000 = 0 AND (i - 1) / 100000 < array_length(special_authors, 1) THEN
+                    current_author_id := special_authors[(i - 1) / 100000 + 1];
+                    book_title := special_books[(i - 1) / 100000 + 1];
                 ELSE
                     current_author_id := 1 + floor(random() * author_count)::INT % author_count;
                     book_title := 'book_' || i;

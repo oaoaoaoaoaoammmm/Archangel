@@ -14,6 +14,7 @@ import com.tech.afa.archangel.library.worker.analyzer.IndexGroupByCheckerAnalyze
 import com.tech.afa.archangel.library.worker.analyzer.IndexOrderByCheckerAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.IndexStatisticsCollectorAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.IndexWhereCheckerAnalyzeWorker;
+import com.tech.afa.archangel.library.worker.analyzer.LargeJoinDetectorAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.ManyLinesDetectorAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.StarDetectorAnalyzeWorker;
 import com.tech.afa.archangel.library.worker.analyzer.SubSelectResearchAnalyzeWorker;
@@ -68,6 +69,7 @@ public class AnalyzerImpl implements Analyzer {
         SubSelectResearchAnalyzeWorker subSelectResearchAnalyzeWorker = new SubSelectResearchAnalyzeWorker(map);
         UnusableFieldDetectorAnalyzeWorker unusableFieldDetectorAnalyzeWorker = new UnusableFieldDetectorAnalyzeWorker(context);
         UnusableIndexDetectorAnalyzeWorker unusableIndexDetectorAnalyzeWorker = new UnusableIndexDetectorAnalyzeWorker(context);
+        LargeJoinDetectorAnalyzeWorker largeJoinDetectorAnalyzeWorker = new LargeJoinDetectorAnalyzeWorker();
         List<AnalyzeWorker<SQLRequest>> general = new ArrayList<>();
         general.add(executionPlanAnalyzeWorker);
         general.add(indexStatisticsCollectorAnalyzeWorker);
@@ -75,6 +77,7 @@ public class AnalyzerImpl implements Analyzer {
         general.add(manyLinesDetectorAnalyzeWorker);
         general.add(indexWhereCheckerAnalyzeWorker);
         general.add(transformConditionAnalyzeWorker);
+        general.add(largeJoinDetectorAnalyzeWorker);
         general.add(unusableFieldDetectorAnalyzeWorker);
         general.add(unusableIndexDetectorAnalyzeWorker);
         general.add(subSelectResearchAnalyzeWorker);

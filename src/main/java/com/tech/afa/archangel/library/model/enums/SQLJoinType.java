@@ -6,5 +6,6 @@ public enum SQLJoinType {
     RIGHT,
     FULL,
     CROSS,
+    SIMPLE,
     UNKNOWN
 }

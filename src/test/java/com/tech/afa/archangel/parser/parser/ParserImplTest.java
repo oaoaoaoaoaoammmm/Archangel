@@ -30,8 +30,7 @@ public class ParserImplTest {
         SQLRequestView sqlRequestView = new SQLRequestView("sql1", sql);
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
-
-        System.out.println(sqlRequest);
+        
         assertEquals(sqlRequest.getId(), "sql1");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -47,8 +46,7 @@ public class ParserImplTest {
         SQLRequestView sqlRequestView = new SQLRequestView("sql2", sql);
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
-
-        System.out.println(sqlRequest);
+        
         assertEquals(sqlRequest.getId(), "sql2");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -64,8 +62,7 @@ public class ParserImplTest {
         SQLRequestView sqlRequestView = new SQLRequestView("sql3", sql);
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
-
-        System.out.println(sqlRequest);
+        
         assertEquals(sqlRequest.getId(), "sql3");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -83,8 +80,7 @@ public class ParserImplTest {
         SQLRequestView sqlRequestView = new SQLRequestView("sql4", sql);
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
-
-        System.out.println(sqlRequest);
+        
         assertEquals(sqlRequest.getId(), "sql4");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -106,8 +102,7 @@ public class ParserImplTest {
         SQLRequestView sqlRequestView = new SQLRequestView("sql5", sql);
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
-
-        System.out.println(sqlRequest);
+        
         assertEquals(sqlRequest.getId(), "sql5");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -130,8 +125,7 @@ public class ParserImplTest {
         SQLRequestView sqlRequestView = new SQLRequestView("sql6", sql);
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
-
-        System.out.println(sqlRequest);
+        
         assertEquals(sqlRequest.getId(), "sql6");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -158,8 +152,7 @@ public class ParserImplTest {
         SQLRequestView sqlRequestView = new SQLRequestView("sql7", sql);
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
-
-        System.out.println(sqlRequest);
+        
         assertEquals(sqlRequest.getId(), "sql7");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -183,8 +176,7 @@ public class ParserImplTest {
         SQLRequestView sqlRequestView = new SQLRequestView("sql8", sql);
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
-
-        System.out.println(sqlRequest);
+        
         assertEquals(sqlRequest.getId(), "sql8");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -210,8 +202,7 @@ public class ParserImplTest {
         SQLRequestView sqlRequestView = new SQLRequestView("sql9", sql);
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
-
-        System.out.println(sqlRequest);
+        
         assertEquals(sqlRequest.getId(), "sql9");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -240,8 +231,7 @@ public class ParserImplTest {
         SQLRequestView sqlRequestView = new SQLRequestView("sql10", sql);
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
-
-        System.out.println(sqlRequest);
+        
         assertEquals(sqlRequest.getId(), "sql10");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -252,7 +242,7 @@ public class ParserImplTest {
         assertEquals(sqlRequest.getJoins().size(), 1);
         SQLJoin join = sqlRequest.getJoins().getFirst();
         assertEquals(join.getJoinedTable(), "books");
-        assertEquals(join.getType(), SQLJoinType.INNER);
+        assertEquals(join.getType(), SQLJoinType.UNKNOWN);
         assertEquals(join.getCondition().getExpression(), "authors.id = books.author_id");
         assertEquals(join.getCondition().getFieldName(), "authors.id");
         assertEquals(join.getCondition().getCondition(), Condition.EQUALS);
@@ -278,7 +268,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql11");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -306,7 +295,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql12");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -340,7 +328,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql13");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -380,7 +367,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql15");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -413,7 +399,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql16");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -443,7 +428,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql17");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -472,7 +456,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql18");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -505,7 +488,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql19");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -539,7 +521,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql20");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.SELECT);
@@ -579,7 +560,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql1");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.INSERT);
@@ -604,7 +584,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql2");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.INSERT);
@@ -640,7 +619,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql3");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.INSERT);
@@ -691,7 +669,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql1");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.UPDATE);
@@ -722,7 +699,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql2");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.UPDATE);
@@ -757,7 +733,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql3");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.UPDATE);
@@ -785,7 +760,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql4");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.UPDATE);
@@ -811,7 +785,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql1");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.DELETE);
@@ -834,7 +807,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql2");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.DELETE);
@@ -869,7 +841,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql3");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.DELETE);
@@ -908,7 +879,6 @@ public class ParserImplTest {
 
         SQLRequest sqlRequest = parser.parse(sqlRequestView);
 
-        System.out.println(sqlRequest);
         assertEquals(sqlRequest.getId(), "sql4");
         assertEquals(sqlRequest.getNativeSql(), sql);
         assertEquals(sqlRequest.getCommandType(), SQLCommandType.DELETE);

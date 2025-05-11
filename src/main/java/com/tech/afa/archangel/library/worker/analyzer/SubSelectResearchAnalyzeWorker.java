@@ -4,6 +4,7 @@ import com.tech.afa.archangel.library.model.analyze.SQLAnalyzeResult;
 import com.tech.afa.archangel.library.model.enums.SQLCommandType;
 import com.tech.afa.archangel.library.model.request.SQLCondition;
 import com.tech.afa.archangel.library.model.request.SQLRequest;
+import com.tech.afa.archangel.library.model.request.SQLValue;
 import com.tech.afa.archangel.library.worker.AnalyzeWorker;
 import com.tech.afa.archangel.library.worker.AnalyzeWorkerType;
 import com.tech.afa.archangel.library.worker.WorkerSignal;
@@ -52,8 +53,9 @@ public class SubSelectResearchAnalyzeWorker implements AnalyzeWorker<SQLRequest>
         if (sqlRequest.getValues() != null) {
             sqlRequest.getValues().stream()
                 .flatMap(Collection::stream)
+                .map(SQLValue::getSelectRequest)
                 .filter(Objects::nonNull)
-                .forEach(value -> startSubSelectAnalyze(value.getSelectRequest(), sqlAnalyzeResult));
+                .forEach(subSelect -> startSubSelectAnalyze(subSelect, sqlAnalyzeResult));
         }
         return WorkerSignal.NEXT;
     }
@@ -68,7 +70,6 @@ public class SubSelectResearchAnalyzeWorker implements AnalyzeWorker<SQLRequest>
     }
 
     private void startSubSelectAnalyze(SQLRequest sqlRequest, SQLAnalyzeResult sqlAnalyzeResult) {
-        System.out.println(sqlRequest);
         SQLCommandType commandType = sqlRequest.getCommandType();
         AnalyzeWorkerType workerType = AnalyzeWorkerType.valueOf(commandType.name());
         WorkerStarter.startWork(sqlRequest, sqlAnalyzeResult, workers.get(workerType));

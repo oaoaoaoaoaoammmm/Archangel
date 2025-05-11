@@ -375,7 +375,13 @@ public class ParserImpl implements Parser {
         if (join.isCross()) {
             return SQLJoinType.CROSS;
         }
-        return SQLJoinType.INNER;
+        if (join.isInner()) {
+            return SQLJoinType.INNER;
+        }
+        if (join.isSimple()) {
+            return SQLJoinType.SIMPLE;
+        }
+        return SQLJoinType.UNKNOWN;
     }
 
     private void parseWhereClause(

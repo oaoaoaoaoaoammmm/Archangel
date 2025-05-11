@@ -68,7 +68,12 @@ public class ArchangelContext {
         private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
         private void startRefreshSchema(boolean skipSchedulingNewTask) {
-            tables.putAll(schemaLoader.loadSchema());
+            Map<String, Table> updatedTables = schemaLoader.loadSchema();
+            tables.forEach((k, v) -> updatedTables.computeIfPresent(k, (key, table) -> {
+                table.setStatistics(v.getStatistics());
+                return table;
+            }));
+            tables.putAll(updatedTables);
             StringBuilder sb = new StringBuilder();
             tables.forEach(((s, table) -> sb.append(table.toString())));
             log.info("Storage structure: \n{}", sb.toString());
