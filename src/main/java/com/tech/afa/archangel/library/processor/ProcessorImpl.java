@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProcessorImpl implements Processor {
 
-    private final int triggerThreshold;
+    private final long triggerThreshold;
     private final TriggerMode triggerMode;
 
     private final Parser parser;
@@ -33,13 +33,12 @@ public class ProcessorImpl implements Processor {
         try {
             SQLRequest sqlRequest = parser.parse(sqlView);
             sqlRequest.setExecuteTime(sqlView.executeTime());
-            System.out.println(sqlRequest);
             RequestStatistics reqStats = statisticService.calculateRequestStatistics(sqlRequest);
             if (sqlRequest.getCommandType() != SQLCommandType.UNKNOWN) {
                 boolean isFirstTime = reqStats.getRequestCount() == 1;
                 boolean trig = reqStats.getRequestCount() % triggerThreshold == 0 || isFirstTime;
                 boolean shouldResetStats = reqStats.getRequestCount() % triggerThreshold == 1;
-                List<TableStatistics> tableStats = statisticService.calculateTablesStatistics(sqlRequest, isFirstTime);
+                List<TableStatistics> tableStats = statisticService.calculateTablesStatistics(sqlRequest);
                 if (triggerMode == TriggerMode.BY_COUNT && trig) {
                     SQLAnalyzeResult sqlAnalyzeResult = analyzer.analyze(sqlRequest, reqStats, tableStats);
                     //if (!isFirstTime) {

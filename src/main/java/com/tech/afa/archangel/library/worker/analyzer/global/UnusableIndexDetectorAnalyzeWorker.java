@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UnusableIndexDetectorAnalyzeWorker implements AnalyzeWorker<SQLRequest> {
 
-    private static final String UNUSABLE_INDEX_ADVICE = "Table %s has unused index(s) - %s";
+    private static final String UNUSABLE_INDEX_ADVICE = "Table '%s' has unused index(s) - %s.";
 
     private final ArchangelContext context;
 

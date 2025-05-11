@@ -35,88 +35,16 @@ public class StatisticService {
         return stats;
     }
 
-    public List<TableStatistics> calculateTablesStatistics(SQLRequest request, boolean isFirstTime) {
+    public List<TableStatistics> calculateTablesStatistics(SQLRequest request) {
         return request.getTables()
             .stream()
-            .map(tableName -> {
-                Table table = context.getTable(tableName);
-                TableStatistics stats = table.getStatistics();
-                stats.incrementRequestCountAndGet();
-                if (isFirstTime) {
-                    getAllFieldNameFromSQLRequest(request, table).forEach(stats::addUsableField);
-                }
-                return stats;
-            })
+            .map(context::getTable)
+            .map(Table::getStatistics)
+            .peek(TableStatistics::incrementRequestCountAndGet)
             .toList();
     }
 
     private long calcAverageValByIncrementalMethod(long count, long average, long last) {
         return (average * (count - 1) + last) / count;
-    }
-
-    private List<String> getAllFieldNameFromSQLRequest(SQLRequest request, Table table) {
-        List<String> fieldNames = request.getColumns().stream()
-            .map(SQLUtils::extractFieldName)
-            .filter(table::hasColumn)
-            .collect(Collectors.toCollection(ArrayList::new));
-        if (request.getColumns().getFirst().equals("*")) {
-            fieldNames.add("*");
-        }
-        if (request.getJoins() != null) {
-            accumulateFieldNamesFromJoin(request, table, this::isDefaultJoin, fieldNames);
-            accumulateFieldNamesFromJoin(request, table, this::isJoinWithFieldName, fieldNames);
-        }
-        if (request.getWhereCondition() != null) {
-            SQLCondition whereCondition = request.getWhereCondition();
-            if (isDefaultCondition(whereCondition) || isConditionWithFieldName(whereCondition)) {
-                String fieldName = getFieldNameFromSQLConditionByTableName(whereCondition, table);
-                if (fieldName != null) fieldNames.add(fieldName);
-            }
-        }
-        if (request.getHavingCondition() != null) {
-            SQLCondition havingCondition = request.getHavingCondition();
-            if (isDefaultCondition(havingCondition) || isConditionWithFieldName(havingCondition)) {
-                String fieldName = getFieldNameFromSQLConditionByTableName(havingCondition, table);
-                if (fieldName != null) fieldNames.add(fieldName);
-            }
-        }
-        return fieldNames;
-    }
-
-    private void accumulateFieldNamesFromJoin(SQLRequest request, Table table, Predicate<SQLJoin> predicate, List<String> fieldNames) {
-        request.getJoins().stream()
-            .filter(predicate)
-            .map(SQLJoin::getCondition)
-            .map(cond -> getFieldNameFromSQLConditionByTableName(cond, table))
-            .filter(Objects::nonNull)
-            .forEach(fieldNames::add);
-    }
-
-    private boolean isDefaultJoin(SQLJoin join) {
-        return isDefaultCondition(join.getCondition()) && join.getSubSelect() == null;
-    }
-
-    private boolean isJoinWithFieldName(SQLJoin join) {
-        return isConditionWithFieldName(join.getCondition()) && join.getSubSelect() != null;
-    }
-
-    private boolean isDefaultCondition(SQLCondition cond) {
-        return (cond != null && cond.getFieldName() != null && cond.getCondition() != null && cond.getValue() != null);
-    }
-
-    private boolean isConditionWithFieldName(SQLCondition cond) {
-        return (cond != null && cond.getFieldName() != null && cond.getCondition() != null && cond.getValue() == null && cond.getSubSelect() != null);
-    }
-
-    private String getFieldNameFromSQLConditionByTableName(SQLCondition condition, Table table) {
-        String fieldName = SQLUtils.extractFieldName(condition.getFieldName());
-        if (table.hasColumn(fieldName)) {
-            return fieldName;
-        }
-        String fieldNameFromValue = SQLUtils.extractFieldName(condition.getValue());
-        if (table.hasColumn(fieldNameFromValue)) {
-            return fieldNameFromValue;
-        }
-        return null;
     }
 }

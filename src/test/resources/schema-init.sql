@@ -6,8 +6,6 @@ CREATE TABLE authors
     country    VARCHAR(50)
 );
 
-CREATE INDEX idx_lower_name ON authors (LOWER(name));
-
 CREATE TABLE books
 (
     book_id          SERIAL PRIMARY KEY,
@@ -19,55 +17,40 @@ CREATE TABLE books
 INSERT INTO authors (name, birth_date, country)
 VALUES ('Лев Толстой', '1828-09-09', 'Россия'),
        ('Фёдор Достоевский', '1821-11-11', 'Россия'),
-       ('Эрнест Хемингуэй', '1899-07-21', 'США');
+       ('Антон Чехов', '1860-01-29', 'Россия'),
+       ('Александр Пушкин', '1799-06-06', 'Россия'),
+       ('Иван Тургенев', '1818-11-09', 'Россия'),
+       ('Николай Гоголь', '1809-04-01', 'Россия'),
+       ('Михаил Булгаков', '1891-05-15', 'Россия'),
+       ('Александр Солженицын', '1918-12-11', 'Россия'),
+       ('Эрнест Хемингуэй', '1899-07-21', 'США'),
+       ('Марк Твен', '1835-11-30', 'США');
 
 DO
 $$
     DECLARE
-        i              INT;
-        special_titles TEXT[] := ARRAY [
-            'Война и мир - юбилейное издание',
-            'Преступление и наказание - коллекционное издание',
-            'Старик и море - золотая классика',
-            'Анна Каренина - подарочное издание',
-            'Братья Карамазовы - полное собрание',
-            'По ком звонит колокол - специальный выпуск',
-            'Воскресение - памятное издание',
-            'Идиот - эксклюзивная версия',
-            'Прощай, оружие! - ограниченный тираж',
-            'Бесы - авторская редакция'
+        i                 INT;
+        current_author_id INT;
+        book_title        TEXT;
+        author_count      INT    := 10;
+        special_authors   INT[]  := ARRAY [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        special_books     TEXT[] := ARRAY [
+            'Война и мир', 'Преступление и наказание', 'Вишневый сад', 'Евгений Онегин', 'Отцы и дети',
+            'Мёртвые души', 'Мастер и Маргарита', 'Один день Ивана Денисовича', 'Старик и море', 'Приключения Тома Сойера'
             ];
-        regular_titles TEXT[] := ARRAY [
-            'Роман без названия',
-            'Неизвестное произведение',
-            'Сборник рассказов',
-            'Поэмы и стихи',
-            'Дневники и письма',
-            'Избранные произведения',
-            'Полное собрание сочинений',
-            'Литературное наследие',
-            'Записки писателя',
-            'Хрестоматия'
-            ];
-        book_title     TEXT;
-        pub_year       INT;
-        author         INT;
     BEGIN
-        FOR i IN 1..100000
+        FOR i IN 1..1000000
             LOOP
-                IF i % 100000 = 0 THEN
-                    book_title := special_titles[(i / 100000)::INT];
+                IF (i - 1) % 100000 = 0 AND (i - 1) / 100000 < array_length(special_authors, 1) THEN
+                    current_author_id := special_authors[(i - 1) / 100000 + 1];
+                    book_title := special_books[(i - 1) / 100000 + 1];
                 ELSE
-                    book_title := regular_titles[1 + floor(random() * array_length(regular_titles, 1))] || ' ' ||
-                                  (1000 + floor(random() * 9000))::TEXT;
+                    current_author_id := 1 + floor(random() * author_count)::INT % author_count;
+                    book_title := 'book_' || i;
                 END IF;
-                pub_year := 1800 + floor(random() * 224)::INT;
-                author := 1 + floor(random() * 3)::INT;
+
                 INSERT INTO books (title, publication_year, author_id)
-                VALUES (book_title, pub_year, author);
-                IF i % 10000 = 0 THEN
-                    COMMIT;
-                END IF;
+                VALUES (book_title, 1900 + (i % 126), current_author_id);
             END LOOP;
     END
 $$;

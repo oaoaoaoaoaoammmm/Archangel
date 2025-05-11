@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ArchangelProperties {
     private boolean enabled;
     private String schema;
-    private int triggerThreshold = 1;
+    private long delayToRefreshSchemaSec = 600;
+    private long triggerThreshold = 1;
     private TriggerMode triggerMode = TriggerMode.BY_COUNT;
 }
